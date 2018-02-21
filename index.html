@@ -5,40 +5,40 @@
         <title>NIKVO Four-Function Calculator(TM)</title>
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    <body>
+    <body></body>
         <div class="calculator">
             <div class="calculator-row row1">
-                <div id="calculator-screen"></div>
+                <div class="calculator-screen">0</div>
             </div>
             <div class="calculator-row row2">
-                <button id="button-plusminus">&pm;</button>
-                <button id="button-squareroot">&radic;</button>
-                <button id="button-percent">&percnt;</button>
-                <button id="button-divide">&div;</button>
+                <button class="button-plusminus unary-operator">&pm;</button>
+                <button class="button-squareroot unary-operator">&radic;</button>
+                <button class="button-percent unary-operator">&percnt;</button>
+                <button class="button-divide binary-operator">&div;</button>
             </div>
             <div class="calculator-row row3">
-                <button id="button-7">7</button>
-                <button id="button-8">8</button>
-                <button id="button-9">9</button>
-                <button id="button-multiply">&times;</button>
+                <button class="button-7 number">7</button>
+                <button class="button-8 number">8</button>
+                <button class="button-9 number">9</button>
+                <button class="button-multiply binary-operator">&times;</button>
             </div>
             <div class="calculator-row row4">
-                <button id="button-4">4</button>
-                <button id="button-5">5</button>
-                <button id="button-6">6</button>
-                <button id="button-subtract">-</button>
+                <button class="button-4 number">4</button>
+                <button class="button-5 number">5</button>
+                <button class="button-6 number">6</button>
+                <button class="button-subtract binary-operator">-</button>
             </div>
             <div class="calculator-row row5">
-                <button id="button-1">1</button>
-                <button id="button-2">2</button>
-                <button id="button-3">3</button>
-                <button id="button-add">+</button>
+                <button class="button-1 number">1</button>
+                <button class="button-2 number">2</button>
+                <button class="button-3 number">3</button>
+                <button class="button-add binary-operator">+</button>
             </div>
             <div class="calculator-row row6">
-                <button id="button-clear">C</button>
-                <button id="button-0">0</button>
-                <button id="button-decimal">.</button>
-                <button id="button-equals">=</button>
+                <button class="button-clear">C</button>
+                <button class="button-0 number">0</button>
+                <button class="button-decimal">.</button>
+                <button class="button-equals">=</button>
             </div>
         </div>
         <script src="script.js"></script>
