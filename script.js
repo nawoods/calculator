@@ -42,9 +42,15 @@ function onButtonClick() {
         processBinaryOperator(this.innerHTML);
         return;
     }
+    
+    if (this.classList.contains('button-equals')) {
+        processEquals();
+        return;
+    }
 }
 
 function processNumberButton(str) {
+    console.log(calculatorState);
     if (calculatorState.computation) clear();
 
     let currentNumber = 'number' + 
@@ -58,16 +64,39 @@ function processNumberButton(str) {
 }
 
 function processBinaryOperator(str) {
-    if (calculatorState.binaryOperator !== '') {
+    if (!calculatorState.computation && calculatorState.binaryOperator !== '') {
         computeBinary();
-        moveToNextOperation();
     }
-
+    
+    calculatorState.computation = false;
+    calculatorState.number2 = "0";
     calculatorState.binaryOperator = str;
 }
 
+function processEquals() {
+    if (calculatorState.binaryOperator !== '') {
+        computeBinary();
+    }
+}
+
 function computeBinary() {
-    console.log("bleep bleep i'm a computer doing math");
+    switch (calculatorState.binaryOperator) {
+        case '+':
+            calculatorState.number1 = (+calculatorState.number1 + +calculatorState.number2).toString();
+            break;
+        case '-':
+            calculatorState.number1 = (+calculatorState.number1 - +calculatorState.number2).toString();
+            break;
+        case '×':
+            calculatorState.number1 = (+calculatorState.number1 * +calculatorState.number2).toString();
+            break;
+        case '÷':
+            calculatorState.number1 = (+calculatorState.number1 / +calculatorState.number2).toString();
+            break;
+    }
+    
+    updateScreen(calculatorState.number1);
+    calculatorState.computation = true;
 }
 
 
@@ -75,16 +104,9 @@ function updateScreen(str) {
     screen.innerHTML = str;
 }
 
-function moveToNextOperation() {
-    calculatorState.number1 = calculatorState.number2;
-    calculatorState.binaryOperator = '';
-    calculatorState.number2 = '0';
-    calculatorState.compuation = false;
-}
-
-    
 
 function clear() {
+    console.log('i can see clearly now the rain is gone');
     calculatorState.number1 = '0';
     calculatorState.binaryOperator = '';
     calculatorState.number2 = '0';
