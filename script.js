@@ -7,7 +7,7 @@ const calculatorState = {
     number1: '0',
     binaryOperator: '',
     number2: '0',
-    clearOnEntry: false, // whether pressing any button clears the above variables
+    computation: false,       // whether a computation just finished
 }
 
 const buttonShortNames = ['plusminus', 'squareroot', 'percent', 'divide',
@@ -17,7 +17,7 @@ const buttonShortNames = ['plusminus', 'squareroot', 'percent', 'divide',
                           'clear', '0', 'decimal', 'equals'];
                           
 const buttons = {};
-const screen = document.querySelector('.calculator-screen')
+const screen = document.querySelector('.calculator-screen');
 
 for (let i = 0; i < buttonShortNames.length; i++) {
     let shortName = buttonShortNames[i];
@@ -26,7 +26,6 @@ for (let i = 0; i < buttonShortNames.length; i++) {
 }
 
 function onButtonClick() {
-    if (calculatorState.clearOnEntry) clear();
     updateScreen(this.innerHTML);
     
     if (this.classList.contains('button-clear')) {
@@ -35,13 +34,21 @@ function onButtonClick() {
     }
     
     if (this.classList.contains('number')) {
-        onNumberButtonClick(this.innerHTML);
+        processNumberButton(this.innerHTML);
+        return;
+    }
+
+    if (this.classList.contains('binary-operator')) {
+        processBinaryOperator(this.innerHTML);
         return;
     }
 }
 
-function onNumberButtonClick(str) {
-    let currentNumber = 'number' + (calculatorState.binaryOperator === '' ? 1 : 2);
+function processNumberButton(str) {
+    if (calculatorState.computation) clear();
+
+    let currentNumber = 'number' + 
+            (calculatorState.binaryOperator === '' ? 1 : 2);
     if (calculatorState[currentNumber] !== '0') {
         calculatorState[currentNumber] += str;
     } else if (str !== 0) {
@@ -50,14 +57,37 @@ function onNumberButtonClick(str) {
     updateScreen(calculatorState[currentNumber]);
 }
 
+function processBinaryOperator(str) {
+    if (calculatorState.binaryOperator !== '') {
+        computeBinary();
+        moveToNextOperation();
+    }
+
+    calculatorState.binaryOperator = str;
+}
+
+function computeBinary() {
+    console.log("bleep bleep i'm a computer doing math");
+}
+
+
 function updateScreen(str) {
     screen.innerHTML = str;
 }
+
+function moveToNextOperation() {
+    calculatorState.number1 = calculatorState.number2;
+    calculatorState.binaryOperator = '';
+    calculatorState.number2 = '0';
+    calculatorState.compuation = false;
+}
+
+    
 
 function clear() {
     calculatorState.number1 = '0';
     calculatorState.binaryOperator = '';
     calculatorState.number2 = '0';
-    calculatorState.clearOnEntry = false;
+    calculatorState.computation = false;
     updateScreen(calculatorState.number1);
 }
