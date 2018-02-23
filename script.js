@@ -48,6 +48,11 @@ function onButtonClick() {
         processPlusminus();
         return;
     }
+    
+    if (this.classList.contains('button-decimal')) {
+        processDecimal();
+        return;
+    }
 }
 
 function processNumberButton(str) {
@@ -88,6 +93,17 @@ function processPlusminus() {
         calculatorState.number2 = (-calculatorState.number2).toString();
         updateScreen(calculatorState.number2);
     }
+}
+
+function processDecimal() {
+    let currentNumber = 'number' + 
+            (calculatorState.binaryOperator === '' ? 1 : 2);
+    if (calculatorState[currentNumber].includes('.')) {
+        return;
+    }
+    
+    calculatorState[currentNumber] += '.';
+    updateScreen(calculatorState[currentNumber]);
 }
 
 function computeBinary() {
