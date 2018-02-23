@@ -1,5 +1,5 @@
 // 'internal memory' of the calculator
-const calculatorState = {
+const calcState = {
     number1: '0',
     binaryOperator: '',
     number2: '0',
@@ -56,74 +56,86 @@ function onButtonClick() {
 }
 
 function processNumberButton(str) {
-    if (calculatorState.computation) clear();
-
+    if (calcState.computation) clear();
     let currentNumber = 'number' + 
-            (calculatorState.binaryOperator === '' ? 1 : 2);
-    if (calculatorState[currentNumber] !== '0') {
-        calculatorState[currentNumber] += str;
-    } else if (str !== 0) {
-        calculatorState[currentNumber] = str;
+            (calcState.binaryOperator === '' ? 1 : 2);
+            
+    switch (calcState.currentNumber) {
+        case ('0'):
+            calcState.currentNumber = str;
+            break;
+        case ('-0'):
+            calcState.currentNumber = '-' + str;
+            break;
+        default:
+            calcState.currentNumber += str;
     }
-    updateScreen(calculatorState[currentNumber]);
+    
+    updateScreen(calcState[currentNumber]);
 }
 
 function processBinaryOperator(str) {
-    if (!calculatorState.computation && calculatorState.binaryOperator !== '') {
+    if (!calcState.computation && calcState.binaryOperator !== '') {
         computeBinary();
     }
     
-    calculatorState.computation = false;
-    calculatorState.number2 = "0";
-    calculatorState.binaryOperator = str;
+    calcState.computation = false;
+    calcState.number2 = "0";
+    calcState.binaryOperator = str;
 }
 
 function processEquals() {
-    if (calculatorState.binaryOperator !== '') {
+    if (calcState.binaryOperator !== '') {
         computeBinary();
     }
 }
 
 function processPlusminus() {
-    if (calculatorState.computation || 
-            (calculatorState.binaryOperator === '' && calculatorState.number2 === '0')) {
-        calculatorState.number1 = (-calculatorState.number1).toString();
-        updateScreen(calculatorState.number1);
+    let currentNumber = 'number' + 
+            (calcState.computation || calcState.binaryOperator === '' ? 1 : 2);
+    if (calcState[currentNumber].includes('-')) {
+        calcState[currentNumber] = calcState[currentNumber].slice(1);
     } else {
-        calculatorState.number2 = (-calculatorState.number2).toString();
-        updateScreen(calculatorState.number2);
+        calcState[currentNumber] = '-' + calcState[currentNumber];
     }
+    updateScreen(calcState[currentNumber]);
 }
 
 function processDecimal() {
+    if (calcState.computation) clear();
+    
     let currentNumber = 'number' + 
-            (calculatorState.binaryOperator === '' ? 1 : 2);
-    if (calculatorState[currentNumber].includes('.')) {
+            (calcState.binaryOperator === '' ? 1 : 2);
+    if (calcState[currentNumber].includes('.')) {
         return;
     }
     
-    calculatorState[currentNumber] += '.';
-    updateScreen(calculatorState[currentNumber]);
+    calcState[currentNumber] += '.';
+    updateScreen(calcState[currentNumber]);
 }
 
 function computeBinary() {
-    switch (calculatorState.binaryOperator) {
+    switch (calcState.binaryOperator) {
         case '+':
-            calculatorState.number1 = (+calculatorState.number1 + +calculatorState.number2).toString();
+            calcState.number1 = (+calcState.number1 + 
+                +calcState.number2).toString();
             break;
         case '-':
-            calculatorState.number1 = (+calculatorState.number1 - +calculatorState.number2).toString();
+            calcState.number1 = (+calcState.number1 - 
+                +calcState.number2).toString();
             break;
         case '×':
-            calculatorState.number1 = (+calculatorState.number1 * +calculatorState.number2).toString();
+            calcState.number1 = (+calcState.number1 * 
+                +calcState.number2).toString();
             break;
         case '÷':
-            calculatorState.number1 = (+calculatorState.number1 / +calculatorState.number2).toString();
+            calcState.number1 = (+calcState.number1 / 
+                +calcState.number2).toString();
             break;
     }
     
-    updateScreen(calculatorState.number1);
-    calculatorState.computation = true;
+    updateScreen(calcState.number1);
+    calcState.computation = true;
 }
 
 
@@ -133,9 +145,9 @@ function updateScreen(str) {
 
 
 function clear() {
-    calculatorState.number1 = '0';
-    calculatorState.binaryOperator = '';
-    calculatorState.number2 = '0';
-    calculatorState.computation = false;
-    updateScreen(calculatorState.number1);
+    calcState.number1 = '0';
+    calcState.binaryOperator = '';
+    calcState.number2 = '0';
+    calcState.computation = false;
+    updateScreen(calcState.number1);
 }
