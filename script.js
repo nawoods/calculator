@@ -1,7 +1,3 @@
-function capitalize (str) {
-    return str.slice(0, 1).toUpperCase + str.slice(1).toLowerCase;
-}
-
 // 'internal memory' of the calculator
 const calculatorState = {
     number1: '0',
@@ -47,10 +43,14 @@ function onButtonClick() {
         processEquals();
         return;
     }
+    
+    if (this.classList.contains('button-plusminus')) {
+        processPlusminus();
+        return;
+    }
 }
 
 function processNumberButton(str) {
-    console.log(calculatorState);
     if (calculatorState.computation) clear();
 
     let currentNumber = 'number' + 
@@ -76,6 +76,17 @@ function processBinaryOperator(str) {
 function processEquals() {
     if (calculatorState.binaryOperator !== '') {
         computeBinary();
+    }
+}
+
+function processPlusminus() {
+    if (calculatorState.computation || 
+            (calculatorState.binaryOperator === '' && calculatorState.number2 === '0')) {
+        calculatorState.number1 = (-calculatorState.number1).toString();
+        updateScreen(calculatorState.number1);
+    } else {
+        calculatorState.number2 = (-calculatorState.number2).toString();
+        updateScreen(calculatorState.number2);
     }
 }
 
@@ -106,7 +117,6 @@ function updateScreen(str) {
 
 
 function clear() {
-    console.log('i can see clearly now the rain is gone');
     calculatorState.number1 = '0';
     calculatorState.binaryOperator = '';
     calculatorState.number2 = '0';
