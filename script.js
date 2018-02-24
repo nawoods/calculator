@@ -39,6 +39,11 @@ function onButtonClick() {
         return;
     }
     
+    if (this.classList.contains('unary-operator')) {
+        processUnaryOperator(this.innerHTML);
+        return;
+    }
+    
     if (this.classList.contains('button-equals')) {
         processEquals();
         return;
@@ -56,19 +61,20 @@ function onButtonClick() {
 }
 
 function processNumberButton(str) {
+    console.log('hi');
     if (calcState.computation) clear();
     let currentNumber = 'number' + 
             (calcState.binaryOperator === '' ? 1 : 2);
             
-    switch (calcState.currentNumber) {
+    switch (calcState[currentNumber]) {
         case ('0'):
-            calcState.currentNumber = str;
+            calcState[currentNumber] = str;
             break;
         case ('-0'):
-            calcState.currentNumber = '-' + str;
+            calcState[currentNumber] = '-' + str;
             break;
         default:
-            calcState.currentNumber += str;
+            calcState[currentNumber] += str;
     }
     
     updateScreen(calcState[currentNumber]);
@@ -82,6 +88,21 @@ function processBinaryOperator(str) {
     calcState.computation = false;
     calcState.number2 = "0";
     calcState.binaryOperator = str;
+}
+
+function processUnaryOperator(operator) {
+    console.log('hey');
+    if (calcState.binaryOperator === '') {
+        calcState.number1 = computeUnary(calcState.number1, operator);
+    } else {
+        calcState.number2 = computeUnary(calcState.number2, operator);
+        computeBinary();
+        calcState.binaryOperator = '';
+        calcState.number2 = '0';
+        calcState.computation = false;
+    }
+    
+    updateScreen(calcState.number1);
 }
 
 function processEquals() {
@@ -114,6 +135,11 @@ function processDecimal() {
     updateScreen(calcState[currentNumber]);
 }
 
+/* computeBinary and computeUnary work a bit differently.
+   computeBinary takes no arguments, instead directly manipulating calcState.
+   computeUnary takes and returns arguments; calcState is manipulated in 
+   the processUnaryOperator function.
+*/
 function computeBinary() {
     switch (calcState.binaryOperator) {
         case '+':
@@ -136,6 +162,18 @@ function computeBinary() {
     
     updateScreen(calcState.number1);
     calcState.computation = true;
+}
+
+function computeUnary(num, operator) {
+    switch (operator) {
+        case '%':
+            num *= .01;
+            break;
+        case '√':
+            num = Math.sqrt(num);
+    }
+    
+    return num;
 }
 
 
