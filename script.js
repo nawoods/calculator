@@ -178,6 +178,13 @@ function computeUnary(num, operator) {
 
 
 function updateScreen(str) {
+    // round numbers so that 8 digits (incl minus sign) appear on screen
+    if (!isNaN(+str) && str.includes('.')) {
+        const places = str.indexOf('.');
+        console.log(places);
+        const factor = Math.pow(10, 9 - places);
+        str = Math.round(+str * factor) / factor;
+    }
     screen.innerHTML = str;
 }
 
